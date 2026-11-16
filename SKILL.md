@@ -9,9 +9,9 @@ description: 根据中文口播稿或同版 SRT 选出值得演绎的段落，�
 
 ## 先确认工作位置
 
-- 读取用户自己的配置目录，找已有角色库和所选模型；首次使用问三件事：**用哪家视频模型、Key 从哪里读取、这次预算多少及币种**。月明团队默认：视频走本机 muse2api（`providers/muse2api.json` + `scripts/muse.py`；Key 只从环境变量 `MUSE2API_KEY` 读取，或由用户通过 `--env-file` 指定自己的文件；服务地址与额度账户须由用户在该 JSON 中自行填写，免费档按周额度），生图默认走用户配置的脚本（如 dudu / gpt-image-2），固定角色用积木人，见下文「月明团队默认」；秘塔 H3（`h3.py`）保留为备选；其他模型按[接入别家模型](references/接入别家模型.md)准备。
+- 读取用户自己的配置目录，确认所选模型，以及使用者是否已换成自己的角色；首次使用问三件事：**用哪家视频模型、Key 从哪里读取、这次预算多少及币种**。月明团队默认：视频走本机 muse2api（`providers/muse2api.json` + `scripts/muse.py`；Key 只从环境变量 `MUSE2API_KEY` 读取，或由用户通过 `--env-file` 指定自己的文件；服务地址与额度账户须由用户在该 JSON 中自行填写，免费档按周额度），生图默认走用户配置的脚本（如 dudu / gpt-image-2），固定角色默认用 skill 内 `characters/final-brick/`，主参考 `characters/final-brick/front.png`，见下文「月明团队默认」；秘塔 H3（`h3.py`）保留为备选；其他模型按[接入别家模型](references/接入别家模型.md)准备。
 - Key 只从环境变量或用户指定的位置读取，不索要用户把真实 Key 贴进聊天，不写进提示词、记录、日志或终端输出。
-- 用户配置目录保存角色库、角色卡、所选模型及 Key 的读取位置；项目目录下的 `.agent-broll/` 保存本片的选段、临时角色、故事板、首帧、报价、确认、请求、任务编号及结果。**skill 安装目录不写运行数据**。
+- 默认角色在 skill 内 `characters/final-brick/`，路径相对 skill 根目录（`SKILL.md` 所在目录）。使用者要换成自己的角色时，把替换后的角色库放在自己的配置目录；未替换就用仓库内这套。配置目录还保存所选模型及 Key 的读取位置。项目目录下的 `.agent-broll/` 保存本片的选段、临时角色、故事板、首帧、报价、确认、请求、任务编号及结果。**skill 安装目录不写运行数据，也不改写 `characters/final-brick/` 里的原图**。
 - 修改／恢复先读本项目已有决定和任务记录；已有远端任务编号优先恢复原任务，不能用新提交替代查询或下载。
 
 ## 1. 通读整稿，选段交用户确认
@@ -27,15 +27,15 @@ description: 根据中文口播稿或同版 SRT 选出值得演绎的段落，�
 
 ## 2. 选择角色，或建立本片临时角色卡
 
-先检查用户角色库，有合适角色就沿用其已确认特征；没有时按[角色](references/角色.md)给三条路：上传自己的形象／用已有图片生成／口述转文生图。Skill 不内置角色。
+默认使用本 skill 自带的 `characters/final-brick/`，每期复用，不另造主角。主身份参考是 `characters/final-brick/front.png`，生图 `--image` 优先传它。使用者明确要换角色时，再按[角色](references/角色.md)替换：上传自己的形象／用已有图片生成／口述转文生图。未要求替换，就不要另做一套主角。
 
-选定后做多角度、表情、动作及干净全身图组成的设定板，附外观、材质、比例和禁止项。用户可跳过完整设定板，改建本项目的临时角色卡；仍须保证片内一致，仍须过故事板关卡。不要使用第三方 IP 或未经同意的他人照片。
+默认设定已经在 `characters/final-brick/`（`characters/final-brick/front.png`、`characters/final-brick/three_quarter.png`、`characters/final-brick/side.png`、`characters/final-brick/back.png`、`characters/final-brick/expressions.png`、`characters/final-brick/sheet.png` 和 `characters/final-brick/base.txt`）。只有换成新主角时才另做多角度、表情、动作和干净全身图，并附外观、材质、比例和禁止项。仍须保证片内一致，仍须过故事板关卡。不要使用第三方 IP 或未经同意的他人照片。
 
 ## 3. 先定第一格风格，再审整页图片故事板
 
 按[故事板](references/故事板.md)执行：
 
-1. 默认用 **用户配置的生图脚本（如 dudu / gpt-image-2）** 出第一格，命令由用户配置目录提供，例如：`python3 <用户配置的生图脚本> --prompt-file <提示词.txt> --out <项目>/.agent-broll/boards/<镜头>.png --size 1536x1024 --model gpt-image-2 --image <角色参考图>`；月明已批准的备选是 Codex 内置生图。让用户定风格；不宣称生图免费或额度无限，脚本单价未记录，批量出图前说明张数。
+1. 默认用 **用户配置的生图脚本（如 dudu / gpt-image-2）** 出第一格，命令由用户配置目录提供，例如：`python3 <用户配置的生图脚本> --prompt-file <提示词.txt> --out <项目>/.agent-broll/boards/<镜头>.png --size 1536x1024 --model gpt-image-2 --image characters/final-brick/front.png`。这里的 `characters/final-brick/front.png` 相对 skill 根目录；`--size 1536x1024` 只用于 B-roll 首帧。月明已批准的备选是 Codex 内置生图。让用户定风格；不宣称生图免费或额度无限，脚本单价未记录，批量出图前说明张数。
 2. 第一格认可后出整页。每格配原文锚点、事件变化、出场角色、镜头说明；制作注记放画格外。
 3. Agent 先做去字测试和静音测试，写出每个有疑问镜头如何成立或如何修改，再交用户审改。
 4. 用户通过本批完整故事板后，才进入视频生成。风格通过不等于整批通过，故事板通过不等于费用确认。
@@ -71,8 +71,8 @@ description: 根据中文口播稿或同版 SRT 选出值得演绎的段落，�
 ## 月明团队默认
 
 - **风格**：知识科普类 B-roll 一律用积木人场景（光泽塑料积木小人 + 积木搭成的场景道具），搭配搞怪表情（大笑、震惊、挤眼、得意举拳等）；**不用写实风**，画面里不出现任何商标、品牌标识或可读文字。
-- **固定角色**：从用户配置的角色库目录读取积木人（须包含 `front.png`（主身份参考，生图 `--image` 优先传它）、`three_quarter.png`、`side.png`、`back.png`、`expressions.png`、`sheet.png`，外观描述在 `base.txt`：积木头、蓬松黑色短发、笑脸、藏青色西装外套、白色T恤、深色腿、黑色底座脚、光泽塑料质感）。每期复用，不另造主角。本仓库不内置该目录的本机路径。
-- **生图**：默认使用用户配置的生图脚本（如 dudu / gpt-image-2），Key 由该脚本自己读，不打印；备选 Codex（月明已批准用于 B-roll 生图）。**月明的视频都是横屏：B-roll 一律 16:9，不做竖屏**，首帧固定 `--size 1536x1024`。
+- **固定角色**：默认目录 `characters/final-brick/`（相对 skill 根）。`characters/final-brick/front.png` 是主身份参考，生图 `--image` 优先传它；同目录还有 `characters/final-brick/three_quarter.png`、`characters/final-brick/side.png`、`characters/final-brick/back.png`、`characters/final-brick/expressions.png`、`characters/final-brick/sheet.png`，外观描述在 `characters/final-brick/base.txt`：积木头、蓬松黑色短发、笑脸、藏青色西装外套、白色T恤、深色腿、黑色底座脚、光泽塑料质感。每期复用这一套，不另造主角。使用者可以换成自己的角色；未替换时读取上述相对路径。设定图保持原比例：`characters/final-brick/front.png`、`characters/final-brick/three_quarter.png`、`characters/final-brick/side.png`、`characters/final-brick/back.png`、`characters/final-brick/expressions.png` 为 1024×1536，`characters/final-brick/sheet.png` 为 4096×1536。16:9 不约束这些设定图，也不把它们裁成横屏。
+- **生图**：默认使用用户配置的生图脚本（如 dudu / gpt-image-2），Key 由该脚本自己读，不打印；备选 Codex（月明已批准用于 B-roll 生图）。**月明的 B-roll 镜头都是横屏：一律 16:9，不做竖屏**，镜头首帧固定 `--size 1536x1024`。16:9 只约束 B-roll 镜头和首帧，不约束 `characters/final-brick/` 里的设定图。
 - **视频**：`scripts/muse.py`，mode 用 `first_frame`（首帧放 `images[0]`，role `first_frame`）或 `text_to_video`；`ratio` 默认且一律用 `16:9`（省略时 muse.py 自动填 16:9；不做 9:16 竖屏）；`duration` 4–10 秒整数（只是提示，实际时长以 ffprobe 为准）；`resolution` 可省略（720P）。使用者自行启动 muse2api 或等效服务，并在 `providers/muse2api.json` 填写 `api.base_url` 与 `api.quota_account_id`；本仓库不内置具体地址、端口或账户标识。
 - **交付检查**：下载后 `ffprobe` 读时长、分辨率、音轨，再抽帧目检；写明“仅抽帧检查”“未听审”等真实状态。
 - 运行数据放项目目录 `.agent-broll/`，不写进 skill 目录。

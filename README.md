@@ -2,7 +2,7 @@
 
 本仓库是 https://github.com/qwbwj3/agent-broll 的衍生副本。上游许可证为 MIT License，Copyright (c) 2026 qwbwj3；原许可证全文见根目录 `LICENSE`（正文未改）。来源与修改说明见 `NOTICE.md`。
 
-团队版相对上游的最小改动：默认视频通道改为可配置的本地 muse2api（`scripts/muse.py`、`providers/muse2api.json`）；生图默认使用用户自行配置的脚本（如 dudu / gpt-image-2），备选 Codex；知识科普 B-roll 默认积木人风格与搞怪表情，不用写实、无商标。原版秘塔 H3 接入仍作为备选保留。本公开副本不包含本机绝对路径、私有服务地址或账户标识；这些项由使用者在本地配置。
+团队版相对上游的最小改动：默认视频通道改为可配置的本地 muse2api（`scripts/muse.py`、`providers/muse2api.json`）；生图默认使用用户自行配置的脚本（如 dudu / gpt-image-2），备选 Codex；知识科普 B-roll 默认积木人风格与搞怪表情，不用写实、无商标。默认主角在 `characters/final-brick/`，主参考是 `characters/final-brick/front.png`，每期复用。原版秘塔 H3 接入仍作为备选保留。本公开副本不包含本机绝对路径、私有服务地址或账户标识；这些项由使用者在本地配置。
 
 把口播视频的字幕交给你的 AI Agent：它挑出值得用角色演的段落，写成分镜，出图给你审；你确认图和报价后，它再调用视频模型生成动画，下载到本地。全程不用写代码，也不用自己写视频提示词。
 
@@ -31,7 +31,7 @@
 
 依次要你确认四样：选段 → 角色和第一格的风格 → 整页故事板 → 报价。图不满意就在出图这一步改，改图不花视频生成的钱。
 
-**还没有自己的形象？** 第一次用时它会带你做：有照片就用照片，没有就用嘴描述，生成几个让你挑。选定后做成一套设定图（正侧背、表情、动作）存下来，以后每期复用。
+**默认形象已经在仓库里。** 使用 `characters/final-brick/` 这套积木人，`characters/final-brick/front.png` 是主参考，每期复用，不另造主角。16:9 只用于 B-roll 镜头；设定图保持原尺寸。想换成自己的形象时，再用照片或口述另做一套，并自行替换这套默认角色。
 
 **生成失败或下载中断？** 跟 Agent 说“查看原任务并继续查询／下载”。已有任务编号就沿原任务恢复，提交结果不明时会停下来核实，不会自动再扣一次钱。任何重做、改参数、换模型都重新报价。
 
@@ -49,6 +49,7 @@
 
 - `SKILL.md`：给 Agent 读的运行说明
 - `NOTICE.md`：上游来源、MIT 声明与团队修改摘要
+- `characters/final-brick/`：默认积木人设定。`characters/final-brick/front.png` 为主身份参考，另有 `characters/final-brick/three_quarter.png`、`characters/final-brick/side.png`、`characters/final-brick/back.png`、`characters/final-brick/expressions.png`、`characters/final-brick/sheet.png`、`characters/final-brick/base.txt`、`characters/final-brick/状态.md`。使用者可以替换，未替换时用这套
 - `references/`：选段、角色、故事板、提示词、价格与提交、接入别家模型
 - `providers/metaso_h3.json`：秘塔 H3 的能力与计价
 - `providers/muse2api.json`、`scripts/muse.py`：muse2api 接入（团队默认；公开副本中地址与账户标识留空，由使用者填写）
