@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "provider": "muse2api",
+  "model": "muse-video",
+  "checked_on": "2026-11-03",
+  "verification": "公开副本不内嵌私有源码路径或本机核对记录。使用者须对照自己的 muse2api（或等效服务）文档，在本文件填写 api.base_url 与 api.quota_account_id 后再使用。",
+  "sources": [
+    {"url": "", "section": "请改为你本地或供应商文档的可公开来源；勿填私有本地文件路径或本机绝对路径"}
+  ],
+  "api": {
+    "base_url": "",
+    "authentication": "Authorization: Bearer；Key 只从环境变量 MUSE2API_KEY 读取（也可由使用者通过 muse.py --env-file 指定自己的文件、进程内载入），下载 /v1/media 不携带",
+    "submit_path": "/videos",
+    "query_path": "/videos/{task_id}",
+    "quota_path": "/admin/accounts/{account_id}/quota",
+    "quota_account_id": "",
+    "task_id_field": "task_id",
+    "result_url_field": "url",
+    "documented_statuses": ["queued", "processing", "completed", "failed"],
+    "status_map": {"queued": "queued", "processing": "running", "completed": "succeeded", "succeeded": "succeeded", "failed": "failed"},
+    "server_idempotency": "无；任务通常只存在本机服务自己的记录中"
+  },
+  "capabilities": {
+    "modes": ["text_to_video", "first_frame"],
+    "resolutions": ["720P"],
+    "ratios": ["16:9", "9:16", "1:1"],
+    "default_ratio": "16:9",
+    "default_first_frame_size": "1536x1024",
+    "duration_seconds": {"executor_minimum": 4, "executor_maximum": 10, "executor_integer_only": true,
+      "note": "duration 只写进提示词，Muse 实际时长不受控；以下载后 ffprobe 为准"},
+    "reference_limits": {"images": 4, "videos": 0, "audios": 0},
+    "media_roles": {"images": ["first_frame", "reference_image"], "videos": [], "audios": []},
+    "native_audio": "Muse 可能自带音轨；须听审"
+  },
+  "pricing": {
+    "billing_unit": "免费档周额度百分比",
+    "currency": "CNY",
+    "basis": "按服务免费档的周额度计，不扣现金；每段占用比例、重置周期以使用者账户实际为准，须自行核实。本公开副本不内置任何账户或档位标识。",
+    "per_job_display_cny": "0",
+    "quota_policy": "提交前实时查询额度；周额度已用 ≥ 95% 时拒绝提交",
+    "max_weekly_used_pct_before_submit": 95
+  },
+  "unknowns": ["失败任务是否占额度", "每段实际占用的精确额度", "实际输出时长与分辨率"]
+}
